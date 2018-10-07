@@ -1,0 +1,22 @@
+{
+  "name": "sample-mongo-db",
+  "version": "1.0.0",
+  "description": "A sample application to learn mongodb.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/VimalkumarK/sample-mongo-db.git"
+  },
+  "author": "Vimalkumar K",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/VimalkumarK/sample-mongo-db/issues"
+  },
+  "homepage": "https://github.com/VimalkumarK/sample-mongo-db#readme",
+  "dependencies": {
+    "mongodb": "^3.1.6"
+  }
+}
