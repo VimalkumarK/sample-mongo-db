@@ -7,11 +7,11 @@ const url = "mongodb://viimaladmin:<PASSWORD>@vimalcluster-shard-00-00-bxkmy.mon
 // Database Name.
 const dbName = "first_app_db";
 
-export default class Connection {
+class Connection {
 
 	// Constructor.
 	constructor() {
-		this.connection = null;
+		this.client = null;
 	}
 
 	/**
@@ -21,13 +21,13 @@ export default class Connection {
 
 		// Connect using MongoClient
 		MongoClient.connect( url, { useNewUrlParser: true } )
-		.then( ( connection ) => {
+		.then( ( client ) => {
 
 			// Set the connection.
-			this.connection = connection.db( dbName );
+			this.client = client.db( dbName );
 
 			// Return the connection object.
-			return this.connection;
+			return this.client;
 		} )
 		.catch( ( exception ) => {
 
@@ -47,3 +47,5 @@ export default class Connection {
 		}
 	}
 }
+
+module.exports = Connection;

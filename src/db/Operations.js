@@ -1,6 +1,6 @@
-import Connection from "./Connection";
+const Connection = require( "./Connection" );
 
-export default class Operations {
+class Operations {
 
 	// Constructor.
 	constructor() {
@@ -11,10 +11,10 @@ export default class Operations {
 	getAllUsersName() {
 
 		// Connect to the db.
-		this.connectoin.connect().then( ( dbconnection ) => {
+		this.connectoin.connect().then( ( client ) => {
 
 			// Get the collection info.
-			const userCollection = dbconnection.collection( "users" );
+			const userCollection = client.collection( "users" );
 
 			// Show the list of users.
 			userCollection.find( {} ).toArray()
@@ -26,9 +26,17 @@ export default class Operations {
 				} );
 
 				console.log( items );
+
+				// Close the connection.
+				this.connectoin.close();
 			} )
 			.catch( ( exception ) => {
+
+				// Log the error.
 				console.log( exception );
+
+				// Close the connection.
+				this.connectoin.close();
 			} );
 
 		} ).catch( ( excepion ) => {
@@ -38,3 +46,5 @@ export default class Operations {
 		} );
 	}
 }
+
+module.exports = Operations;
