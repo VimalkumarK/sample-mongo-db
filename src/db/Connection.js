@@ -20,7 +20,7 @@ class Connection {
 	connect() {
 
 		// Connect using MongoClient
-		MongoClient.connect( url, { useNewUrlParser: true } )
+		return MongoClient.connect( url, { useNewUrlParser: true } )
 		.then( ( client ) => {
 
 			// Set the connection.
