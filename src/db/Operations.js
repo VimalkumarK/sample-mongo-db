@@ -4,46 +4,83 @@ class Operations {
 
 	// Constructor.
 	constructor() {
-		this.connectoin  = new Connection();
+		this.connection  = new Connection();
 	}
 
-	// Get all the list of users.
-	getAllUsersName() {
+	/**
+	 * Get the list of all the users.
+	 *
+	 * @returns {Array} - The users list array.
+	 */
+	async getAllUsersList() {
 
-		// Connect to the db.
-		this.connectoin.connect().then( ( client ) => {
+		try {
+
+			// Connect to the db.
+			await this.connection.connect();
 
 			// Get the collection info.
-			const userCollection = client.collection( "users" );
+			const userCollection = this.connection.db.collection( "users" );
 
 			// Show the list of users.
-			userCollection.find( {} ).toArray()
-			.then( ( itemsResult ) => {
+			const itemsResult = await userCollection.find( {} ).toArray();
 
-				const items = [];
-				itemsResult.forEach( ( item ) => {
-					items.push( item );
-				} );
-
-				console.log( items );
-
-				// Close the connection.
-				this.connectoin.close();
-			} )
-			.catch( ( exception ) => {
-
-				// Log the error.
-				console.log( exception );
-
-				// Close the connection.
-				this.connectoin.close();
+			const items = [];
+			itemsResult.forEach( ( item ) => {
+				items.push( item.name );
 			} );
 
-		} ).catch( ( excepion ) => {
+			// Close the connection.
+			this.connection.close();
+
+			// Return the list users.
+			return items;
+
+		} catch( exception ) {
 
 			// Log the error.
-			console.log( excepion );
-		} );
+			console.log( exception.stack );
+
+			// Close the connection.
+			this.connection.close();
+		};
+	}
+
+	/**
+	 * Insert one record.
+	 * 
+	 * @param {String} userName - The username.
+	 */
+	async insertUser( userName ) {
+
+		// Validate the use name.
+		if( userName ) {
+
+			try {
+
+			// Connect to the db.
+			await this.connection.connect();
+
+			// Get the collection info.
+			const userCollection = this.connection.db.collection( "users" );
+
+			// Insert a single document.
+			await userCollection.insertOne( {
+				name: userName
+			} );
+
+			// Close the connection.
+			this.connection.close();
+
+		} catch( exception ) {
+
+			// Log the error.
+			console.log( exception.stack );
+
+			// Close the connection.
+			this.connection.close();
+		}
+		}
 	}
 }
 

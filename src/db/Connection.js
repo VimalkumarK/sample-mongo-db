@@ -2,39 +2,38 @@ const MongoClient = require( "mongodb" ).MongoClient;
 
 // Connection url.
 // Enter password.
-const url = "mongodb://viimaladmin:<PASSWORD>@vimalcluster-shard-00-00-bxkmy.mongodb.net:27017,vimalcluster-shard-00-01-bxkmy.mongodb.net:27017,vimalcluster-shard-00-02-bxkmy.mongodb.net:27017/test?ssl=true&replicaSet=VimalCluster-shard-0&authSource=admin&retryWrites=true";
+const url = "mongodb://viimaladmin:********@vimalcluster-shard-00-00-bxkmy.mongodb.net:27017,vimalcluster-shard-00-01-bxkmy.mongodb.net:27017,vimalcluster-shard-00-02-bxkmy.mongodb.net:27017/test?ssl=true&replicaSet=VimalCluster-shard-0&authSource=admin&retryWrites=true";
 
 // Database Name.
 const dbName = "first_app_db";
+const client = new MongoClient(  url, { useNewUrlParser: true }  );
 
 class Connection {
 
 	// Constructor.
 	constructor() {
-		this.client = null;
+		this.db = null;
 	}
 
 	/**
 	 * Connect to the database.
 	 */
-	connect() {
+	async connect() {
 
-		// Connect using MongoClient
-		return MongoClient.connect( url, { useNewUrlParser: true } )
-		.then( ( client ) => {
+		try {
+
+			// Connect using MongoClient
+			await client.connect();
 
 			// Set the connection.
-			this.client = client.db( dbName );
+			this.db = client.db( dbName );
 
-			// Return the connection object.
-			return this.client;
-		} )
-		.catch( ( exception ) => {
+		} catch( exception ) {
 
-			// Log the error message.
-			console.log( exception );
-		} );
-	}
+				// Log the error message.
+				console.log( exception.stack );
+			};
+		}
 
 	/**
 	 * Close the connection to db.
@@ -42,8 +41,8 @@ class Connection {
 	close() {
 
 		// Ensure the connection object is available.
-		if( this.connection ) {
-			this.connection.close();
+		if( client ) {
+			client.close();
 		}
 	}
 }
