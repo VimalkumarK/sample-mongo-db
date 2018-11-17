@@ -18,5 +18,8 @@
   "homepage": "https://github.com/VimalkumarK/sample-mongo-db#readme",
   "dependencies": {
     "mongodb": "^3.1.6"
+  },
+  "devDependencies": {
+    "assert": "^1.4.1"
   }
 }

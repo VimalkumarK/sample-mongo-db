@@ -2,11 +2,11 @@ const MongoClient = require( "mongodb" ).MongoClient;
 
 // Connection url.
 // Enter password.
-const url = "mongodb://viimaladmin:********@vimalcluster-shard-00-00-bxkmy.mongodb.net:27017,vimalcluster-shard-00-01-bxkmy.mongodb.net:27017,vimalcluster-shard-00-02-bxkmy.mongodb.net:27017/test?ssl=true&replicaSet=VimalCluster-shard-0&authSource=admin&retryWrites=true";
+const url = "mongodb://viimaladmin:**@vimalcluster-shard-00-00-bxkmy.mongodb.net:27017,vimalcluster-shard-00-01-bxkmy.mongodb.net:27017,vimalcluster-shard-00-02-bxkmy.mongodb.net:27017/test?ssl=true&replicaSet=VimalCluster-shard-0&authSource=admin&retryWrites=true";
 
 // Database Name.
 const dbName = "first_app_db";
-const client = new MongoClient(  url, { useNewUrlParser: true }  );
+const client = new MongoClient(  url, { useNewUrlParser: true, ssl: true }  );
 
 class Connection {
 
@@ -22,7 +22,7 @@ class Connection {
 
 		try {
 
-			// Connect using MongoClient
+			// Connect using MongoClient.
 			await client.connect();
 
 			// Set the connection.
@@ -38,11 +38,11 @@ class Connection {
 	/**
 	 * Close the connection to db.
 	 */
-	close() {
+	async close() {
 
 		// Ensure the connection object is available.
 		if( client ) {
-			client.close();
+			await client.close();
 		}
 	}
 }

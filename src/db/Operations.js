@@ -1,10 +1,22 @@
 const Connection = require( "./Connection" );
+const assert = require( "assert" );
 
 class Operations {
 
 	// Constructor.
 	constructor() {
 		this.connection  = new Connection();
+	}
+
+	/**
+	 * Initialize the connection.
+	 */
+	async initialize() {
+
+		// Connect to the db.
+		if( !this.connection.db ) {
+			await this.connection.connect();
+		}
 	}
 
 	/**
@@ -17,7 +29,11 @@ class Operations {
 		try {
 
 			// Connect to the db.
-			await this.connection.connect();
+			if( !this.connection.db ) {
+				await this.connection.connect();
+			}
+
+			assert.ok( this.connection.db, "DB isn't connected!" );
 
 			// Get the collection info.
 			const userCollection = this.connection.db.collection( "users" );
@@ -30,9 +46,6 @@ class Operations {
 				items.push( item.name );
 			} );
 
-			// Close the connection.
-			this.connection.close();
-
 			// Return the list users.
 			return items;
 
@@ -40,9 +53,6 @@ class Operations {
 
 			// Log the error.
 			console.log( exception.stack );
-
-			// Close the connection.
-			this.connection.close();
 		};
 	}
 
@@ -58,29 +68,109 @@ class Operations {
 
 			try {
 
-			// Connect to the db.
-			await this.connection.connect();
+				// Connect to the db.
+				if( !this.connection.db ) {
+					await this.connection.connect();
+				}
+				
+				assert.ok( this.connection.db, "DB isn't connected!" );
 
-			// Get the collection info.
-			const userCollection = this.connection.db.collection( "users" );
+				// Get the collection info.
+				const userCollection = this.connection.db.collection( "users" );
 
-			// Insert a single document.
-			await userCollection.insertOne( {
-				name: userName
-			} );
+				// Insert a single document.
+				await userCollection.insertOne( {
+					name: userName
+				} );
 
-			// Close the connection.
-			this.connection.close();
+			} catch( exception ) {
 
-		} catch( exception ) {
-
-			// Log the error.
-			console.log( exception.stack );
-
-			// Close the connection.
-			this.connection.close();
+				// Log the error.
+				console.log( exception.stack );
+			}
 		}
+	}
+
+	/**
+	 * Delete one record.
+	 * 
+	 * @param {String} userName - The username.
+	 */
+	async deleteUser( userName ) {
+
+		// Validate the use name.
+		if( userName ) {
+
+			try {
+
+				// Connect to the db.
+				if( !this.connection.db ) {
+					await this.connection.connect();
+				}
+				
+				assert.ok( this.connection.db, "DB isn't connected!" );
+
+				// Get the collection info.
+				const userCollection = this.connection.db.collection( "users" );
+
+				// Delete a single document.
+				await userCollection.deleteOne( {
+					name: userName
+				} );
+
+			} catch( exception ) {
+
+				// Log the error.
+				console.log( exception.stack );
+			}
 		}
+	}
+
+	/**
+	 * Update one record.
+	 * 
+	 * @param {String} oldUserName - The exist username.
+	 * @param {String} newUserName - The new username.
+	 */
+	async updateUser( oldUserName, newUserName ) {
+
+		// Validate the use name.
+		if( oldUserName && newUserName ) {
+
+			try {
+
+				// Connect to the db.
+				if( !this.connection.db ) {
+					await this.connection.connect();
+				}
+				
+				assert.ok( this.connection.db, "DB isn't connected!" );
+
+				// Get the collection info.
+				const userCollection = this.connection.db.collection( "users" );
+
+				// Update a single document.
+				await userCollection.updateOne( {
+					name: oldUserName
+				}, {
+					$set: { name: newUserName }
+				} );
+
+			} catch( exception ) {
+
+				// Log the error.
+				console.log( exception.stack );
+			}
+		}
+	}
+
+	/**
+	 * Finalize the database connection.
+	 */
+	finalize() {
+
+		// Close the connection.
+		this.connection.close();
 	}
 }
 
