@@ -29,9 +29,7 @@ class Operations {
 		try {
 
 			// Connect to the db.
-			if( !this.connection.db ) {
-				await this.connection.connect();
-			}
+			await this.initialize();
 
 			assert.ok( this.connection.db, "DB isn't connected!" );
 
@@ -45,6 +43,8 @@ class Operations {
 			itemsResult.forEach( ( item ) => {
 				items.push( item.name );
 			} );
+
+			// await this.finalize();
 
 			// Return the list users.
 			return items;
@@ -69,9 +69,7 @@ class Operations {
 			try {
 
 				// Connect to the db.
-				if( !this.connection.db ) {
-					await this.connection.connect();
-				}
+				await this.initialize();
 				
 				assert.ok( this.connection.db, "DB isn't connected!" );
 
@@ -104,9 +102,7 @@ class Operations {
 			try {
 
 				// Connect to the db.
-				if( !this.connection.db ) {
-					await this.connection.connect();
-				}
+				await this.initialize();
 				
 				assert.ok( this.connection.db, "DB isn't connected!" );
 
@@ -140,9 +136,7 @@ class Operations {
 			try {
 
 				// Connect to the db.
-				if( !this.connection.db ) {
-					await this.connection.connect();
-				}
+				await this.initialize();
 				
 				assert.ok( this.connection.db, "DB isn't connected!" );
 
@@ -167,10 +161,10 @@ class Operations {
 	/**
 	 * Finalize the database connection.
 	 */
-	finalize() {
+	async finalize() {
 
 		// Close the connection.
-		this.connection.close();
+		await this.connection.close();
 	}
 }
 

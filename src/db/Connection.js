@@ -6,7 +6,7 @@ const url = "mongodb://viimaladmin:**@vimalcluster-shard-00-00-bxkmy.mongodb.net
 
 // Database Name.
 const dbName = "first_app_db";
-const client = new MongoClient(  url, { useNewUrlParser: true, ssl: true }  );
+const client = new MongoClient(  url, { useNewUrlParser: true, ssl: true, useMongoClient: true }  );
 
 class Connection {
 
